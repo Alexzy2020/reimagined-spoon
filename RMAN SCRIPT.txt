@@ -1,0 +1,751 @@
+run {
+#crosscheck copy;
+#delete noprompt expired copy;
+#report obsolete;
+#delete noprompt obsolete;
+crosscheck archivelog all;
+
+#sql "alter system archive log current";
+backup
+filesperset = 32
+
+( archivelog  like '/finarch/UEMOA/archives/%'  not backed up 1 times );
+
+#delete noprompt archivelog  until time = 'sysdate-2'  like '/finarch/UEMOA/archives/%'  backed up 1 times to sbt ;
+#resync catalog;
+
+ backup  current controlfile ;
+
+}
+exit;
+
+====================================================================================================================
+run {
+setlimit channel ch1 maxopenfiles 8;
+setlimit channel ch2 maxopenfiles 8;
+sql "alter system archive log current";
+ backup 
+ filesperset = 32 
+format='<CVJOBID>_%d_%U'
+ ( archivelog  like '/finarch/UEMOA/archives/%'  delete input )
+ ;
+ delete noprompt archivelog  like '/finarch/UEMOA/archives/%'  backed up 1 times to sbt ;
+}
+exit;
+==================================================================================================================Resync==
+production
+rman target / catalog rmanmgr/rmanmgr@ubarepos
+list db_unique_name of database;
+configure db_unique_name 'UBANG_STBY' connect identifier 'UBANG_STBY';
+
+
+
+from DR
+rman target / catalog rmanmgr/rmanmgr@ubarepos
+RMAN> resync catalog;
+
+==================================================================================================
+c@Lc1um
+
+====================
+/archive/DBFARM/archives/
+C:\ORACLE_ARCHIVING_INDEX
+C:\ORACLE_ARCHIVING_INDEX
+
+bMountSourceVolumeInsteadOfSnap
+allowVMWithoutDisks
+PushInstallThroughProxy
+bConsolidateVM
+SkipHotAddForNFSLock
+IgnoreUnsupportedDisks
+nAllowMetadataOnUnsupportedDisks
+ignoreQuiesceGuestErrors
+useLocalHostAsESXProxy
+QuiesceGuest
+nKeepVirtualDiskOffline
+dwDetectGuestOSMode
+nDatastorePercentageFreeSpace
+UseVDDKForAllocatedBlocks
+UseTransportModeForMount ==for restore
+bCollectDiskBlockInfo
+vStorageCompressionScheme
+SkipInstallAndConfigApplications
+PushInstallThroughProxy
+retryNFSMount
+bMountSourceVolumeInsteadOfSnap
+nDisableNetworkCRC
+SDTMaxThreads
+sSNAP_BACKUP_DISABLE_BLOCK_TRACKING ==for RMAN
+bDisableFirewallOnDestination
+bEnableHypervAppAware
+ForceExternalVDDK
+nCreateSnapshotRetryAttempts
+PushInstallThroughProxy
+dwVSAExchangeIntegrityCheck
+bDisableVMotionDuringBackup
+EnableAGDiscovery
+CUSTOMERCING ORACLE RMAN
+sCustombackupPieceFormat
+sNOSBTLIBNAME.
+nDISABLE_CVFWD	Firewall
+
+Eror downloading config file +==nUseHTTPTicket 
+
+nCLNT_FORCE_TUNNEL
+
+SIDBAllowPruneInvalidAfFromDisk
+to kill running jobs
+====================
+JMDeleteRunningJobs
+for commserv string =1
+
+===================
+cmd> mountvol /r   =
+====================
+netsh advfirewall firewall
+netsh firewall show state
+Dism /Online /Enable-feature /FeatureName:TelnetClient
+Install-WindowsFeature -name Telnet-Client
+
+For Microsoft Windows: netstat -ano | find "1234" | find "LISTEN" tasklist /fi "PID eq "1234"
+For Linux: netstat -anpe | grep "1234" | grep "LISTEN"
+Wmiprvse.exe
+
+Get-Host | Select-Object Version ==to kn version of powershell
+==================================================================================================================
+https://kb.vmware.com/s/article/2146204 ==TO DESABLE QUENCING OF APPLICATION
+
+ON VM LOCATE ctkEnabled value to false. TO DESABLE CBT.
+scsix:x.ctkEnabled value for each attached virtual disk to false.
+========================================================
+optionalfeatures ===run
+
+=Add-MpPreference -ExclusionPath "C:\tmp"
+Add-MpPreference -ExclusionProcess "java.exe"
+Add-MpPreference -ExclusionExtension ".java"
+=================================================================================================================================================================================================================================
+Setting Up a Fixed Port for WMI
+To set up a fixed port for WMI
+
+At the command prompt, type winmgmt -standalonehost
+Stop the WMI service by typing the command net stop "Windows Management Instrumentation", or use the short name of net stop winmgmt
+Restart the WMI service again in a new service host by typing net start "Windows Management Instrumentation" or net start winmgmt
+Establish a new port number for the WMI service by typing netsh firewall add portopening TCP 24158 WMIFixedPort
+To undo any changes you make to WMI, type winmgmt /sharedhost, then stop and start the winmgmt service again.
+
+==================================================================================================================
+software remotely from the CommCell Console
+==============================================
+
+Adding an admin user to the local Administrator group will not allow remote WMI access. To allow remote WMI access for an admin user, complete the following steps:
+===================================================================
+Add the user to the Performance Monitor Users group.
+
+Add the user to the DCOM Users group.
+
+Run wmimgmt.msc.
+
+The wmimgmt window appears.
+
+Right-click WMI Control and then click Properties.
+
+The WMI Control Properties dialog box appears.
+
+On the Security tab, select Root > CIMV2 and then click Security.
+
+The Security for ROOT/CIMV2 dialog box appears.
+
+Add Performance Monitor Users and then allow the following options: Enable Account and Remote Enable.
+
+Click OK.
+==================================================================================================================
+https://documentation.commvault.com/11.24/expert/1971_prerequisites_for_installations_using_commcell_console.html#b1975_review_firewall_and_network_port_requirements
+
+https://documentation.commvault.com/11.24/expert/104304_communications_and_remote_installation_requirements.html
+
+https://documentation.commvault.com/11.24/expert/36405_disabling_changed_block_tracking.html
+
+https://documentation.commvault.com/11.24/expert/1971_prerequisites_for_installations_using_commcell_console.html#o1975
+
+https://documentation.commvault.com/cds/120054_adding_private_networks_to_esxi_hosts.html
+
+CBT ==ISSUE:
+=============
+https://www.heelpbook.net/2016/resetting-changed-block-tracking-files-for-vmware-vsphere-vms/
+https://nolabnoparty.com/en/esxi-6-0-cbt-reset-for-vms-to-fix-backup-issue/
+================================================================================================================
+Review Firewall and Network Port Requirements	=
+= = = = = = = = = = = = = = = = = = = = = = = = =
+For UNIX, Linux, and Macintosh computers, enable SSH (Secure Shell), and then open port 22.
+
+For Windows computers, do the following:
+
+Open Port 135 for DCOM (Distributed Component Model).
+
+Open Port 139 for NetBIOS Session Service (if you are using legacy Windows computers, such as Windows NT or earlier versions).
+
+Open Port 445 for SMB (Server Message Block) file sharing.
+
+Open the Windows Management Instrumentation (WMI) port. For instructions on setting up a fixed port for WMI, see Setting Up a Fixed Port for WMI on the Microsoft website.
+
+Important: If Windows Firewall is enabled on the computer, do one of the following:
+
+Temporarily open the following ports in Windows Firewall:
+
+- Port 135 for DCOM-In (COM + Network Access)
+
+- Port 445 for SMB
+
+- WMI port
+
+Set up a remote cache in the network where the computer resides.
+
+Important: For a Windows 10 computer, if Windows Defender Firewall is enabled on the computer, open Port 135 for DCOM-In (COM + Network Access) and Port 445 for SMB in Windows Defender Firewall, and then do one of the following:
+
+Enable the Windows Management Instrumentation rule (for Private, Public, and Domain) in the Inbound Rules of Windows Defender Firewall.
+
+Enable the "Allow inbound remote administrator exception" in the Local Group Policy Editor (Local Group Policy Editor > Local Computer Policy > Administrative Templates > Network > Network Connections > Windows Defender Firewall > Domain Profile > Allow inbound remote administrator exception).
+==========================================
+AUXILLARY COPY JOB
+====================
+https://documentation.commvault.com/11.25/expert/11569_auxiliary_copy_troubleshooting.html
+
+https://documentation.commvault.com/11.25/expert/13992_prevent_jobs_from_being_copied.html
+
+====================================================================================================================
+
+===================================================================================================================
+
+run {
+#crosscheck copy;
+#delete noprompt expired copy;
+#report obsolete;
+#delete noprompt obsolete;
+crosscheck archivelog all;
+
+sql "alter system archive log current";
+backup
+filesperset = 32
+
+( archivelog  like '/backup/UBATD/archives/%'  not backed up 1 times );
+
+delete noprompt archivelog  until time = 'sysdate-1'  like '/backup/UBATD/archives/%'  backed up 1 times to sbt ;
+resync catalog;
+
+ backup  current controlfile ;
+}
+exit;
+
+============================================================================
+==================================================================================================================
+
+run {
+#crosscheck copy;
+#delete noprompt expired copy;
+#report obsolete;
+#delete noprompt obsolete;
+#crosscheck archivelog all;
+
+#sql "alter system archive log current";
+backup
+filesperset = 32
+
+( archivelog  like '/archive/DBFARM/archives/%'  not backed up 1 times );
+
+#delete noprompt archivelog  until time = 'sysdate-2'  like '/archive/DBFARM/archives/%'  backed up 1 times to sbt ;
+#resync catalog;
+
+ backup  current controlfile ;
+
+}
+exit;
+
+=================================================================================================================
+RMAN> list backup of database completed after 'sysdate-(6/24)';
+================================
+
+run {
+  set until scn 33238855;
+  restore spfile;
+}
+=====================================
+run {
+set until scn 33238855;
+restore controlfile;
+}
+
+======================================
+RMAN> run {
+2> set until scn 33238855;
+3> restore controlfile;
+4> }
+======================================
+run {
+set until scn 33238855;
+restore database;
+}
+======================================================================================================
+Change-Based Recovery
+
+SQL> select first_change#-1, sequence#
+     2> from v$archived_log
+     3> where sequence#=387;
+
+FIRST_CHANGE#-1  SEQUENCE# 
+----------       ----------
+      9999             387
+1 row selected.
+
+===============================
+sql> recover automatic database until change 9999;
+
+SQL> recovery database until cancel;
+
+SQL> recovery database until cancel using backup controlfile (if controlfile is also restored)
+
+===================
+Time-Based Recovery
+===================
+SQL>  select first_time from v$archived_log where sequence# = 387;
+
+SQL> recover database until time '1998/12/21:14:42:04';
+Note: When using time-based recovery, the format for the time is YYYY/MM/DD:HH24:MI:SS and enclosed in single quotes.
+
+
+Opening the database after incomplete media recovery
+====================================================
+SQL>  alter database open resetlogs;
+
+Because recovery through resetlogs is not possible a new backup must be taken of the database once it is opened with the RESETLOGS option.
+
+===========================================================
+tep 1: uncatalog the required archivelogs from RMAN prompt RMAN>CHANGE ARCHIVELOG FROM LOGSEQ=60 UNTIL LOGSEQ=70 UNCATALOG; Once the archivelogs have been successfully uncataloged, you are now able to successfully restore the archive logs to a new location.
+
+MISSING ARCHIVE LOG
+=====================
+SQL> select * from v$archive_gap
+Or you can use the v$managed_standby view to find where the log apply stuck.
+
+SQL> select sequence#,process,status from v$managed_standby;
+
+Now, Copy the logs to the standby site from the primary site
+================================================================
+$ scp log_file_name_n.arc oracle@standby:/log/file/location/log_file_name_n.arc
+
+At standby site, Do the log file registration at the standby site until all the missing log files are registered, Use this below command.
+
+SQL> alter database register logfile '/log/file/location/log_file_name_n.arc';
+
+Now apply would take place and your standby will become sync with the primary.
+
+====================================================================================================================
+
+Get-Command -Module Storage |Measure-Object
+Get-Command -Module Storage 
+Get-Disk | ft -AutoSize
+
+Get-Disk | Where-Object IsSystem -eq $True | fl
+Get-Disk | Where-Object IsOffline –Eq $True| ft –AutoSize
+
+Get-PhysicalDisk
+Get-Partition
+Get-Partition –DiskNumber 1,2
+Get-Volume
+=========================================================================
+chkdsk /spotfix)  his example scans the volume H: and reports errors only.
+============================================================================
+PS C:\>Repair-Volume -DriveLetter H -Scan This example uses the spot verifier functionality to quickly fix volumes designation G:, H: and I:. It uses the -DriveLetter switch to designate multiple volumes by their drive letters and SpotFix to indicate the quick fixing action.
+============================================================================
+PS C:\> Repair-Volume -FileSystemLabel "DRMA01_LUN05" -OfflineScanAndFix
+Get-Acl -Path H:\temp
+
+
+Repair-Volume -DriveLetter  -Scan
+=========================================================================
+	
+Test-NetConnection -ComputerName str-vxblk-vc01.ubagroup.com -Port 902
+
+================================================================
+	
+.\Resolve-IpToName.ps1 -IPAddress 69.163.176.252,98.137.246.8
+
+AIX for failure:/commvault/commvault/iDataAgent/jobResults/
+C:\Windows\system32>tasklist -svc | findstr /i 5628
+3dnfsd.exe
+
+C:\Windows\system32>netstat -ano | more
+
+vssadmin list shadows /For= DDB Volume
+
+==============================================================================
+netstat -aof | findstr :8405
+netstat -aof | findstr :8403
+etstat -ano | more
+tasklist -svc |findstr /i 5628
+
+/commvault$ du -gs *| sort -rn
+ps -ef | grep pmon
+
+system32/
+
+wmimgmt.msc
+
+cd\
+diskpart
+automount
+automount scrub
+
+To resolve the issue.
+
+Confirm with CVPING that the Commserve and clients services are running/listening correctly and that DNS resolution is correct.
+Identify the current port limit on the hosts (CommServe, MediaAgent, and Client)
+netsh int ipv4 show dynamicport tcp
+
+netsh int ipv4 show dynamicport udp
+
+If less then full range (16284) of dynamic ports is available, we recommend increasing the number of TCP& UDP dynamic ports to at least 15000 ports.
+netsh int ipv4 set dynamicport tcp start=5000 num=15000
+
+netsh int ipv4 set dynamicport udp start=5000 num=15000
+==============================================================================
+Get-Disk | Where-Object IsOffline –Eq $True | Set-Disk –IsOffline $False
+Initialize-Disk -Number 1
+Initialize-Disk 1 –PartitionStyle MBR
+Get-Disk | Where-Object PartitionStyle –Eq 'RAW' | Initialize-Disk
+New-Partition –DiskNumber 1 -Size 10gb -DriveLetter L
+New-Partition –DiskNumber 1 -AssignDriveLetter –UseMaximumSize
+
+You can change the assigned letter using this command:
+
+Set-Partition –DriveLetter L -NewDriveLetter U
+
+If you want to expand the existing partition, first of all display the available unallocated space to extend this partition:
+
+Get-PartitionSupportedSize -DriveLetter L | Format-List
+
+Then you can extend the size of the partition to the maximum:
+
+$MaxSize = (Get-PartitionSupportedSize -DriveLetter L).SizeMax
+Resize-Partition -DriveLetter L -Size $MaxSize
+
+If you want to make a partition active, this command is used:
+
+Set-Partition -DriveLetter U -IsActive $true
+
+Let’s format new partition in the NTFS and set the DBData volume label:
+
+Format-Volume -DriveLetter L -FileSystem NTFS -NewFileSystemLabel DBData -Confirm:$false
+
+To remove all partitions on disks 1 and 2 without confirmation, run this command:
+
+Get-Partition –DiskNumber 1,2 | Remove-Partition -Confirm:$false
+
+
+To delete all partitions from disks and completely clear data, run the command
+
+Clear-Disk -Number 1 -RemoveData -Confirm:$false
+
+If there are OEM partitions on a disk (OEM recovery partition, EFI partition, System Reserved), use the RemoveOEM parameter to remove them:
+
+Clear-Disk -Number 1 -RemoveData –RemoveOEM
+
+The next PowerShell one-liner will initialize all new connected RAW-type disks, create the partition table on them and create an NTFS partitions with the maximum available size. It is convenient to use it when connecting a new disk:
+
+Get-Disk |Where-Object PartitionStyle -eq 'RAW' |Initialize-Disk -PartitionStyle MBR -PassThru |New-Partition -AssignDriveLetter -UseMaximumSize |Format-Volume -FileSystem NTFS -Confirm:$false
+=====================================================================================
+Make sure commvault agent is installed with appropriate group, to check this login as root and run the command “id oracle” 
+
+ 
+
+# id oracle uid=501(oracle) gid=503(oinstall) groups=503(oinstall),501(dba),502(oper),504(backup)
+ 
+
+verify ls -l /opt/commvault
+
+If oracle group is not provide then run  the following command as root
+
+ 
+
+cvpkgchg -g oinstall -p 77
+
+===================================================================================
+chkdsk x: /f /r 
+===================================================================================
+
+================================================================================================================
+DR-COMMVAULT SERVER Network share [\\Dr_media_svr2\commserve_dr\SHARE]
+
+==================================================================================================================
+
+Enabling Oracle 12c Block Change Tracking
+
+When you enable block change tracking in Oracle 11g, Oracle tracks the physical location of all database changes for incremental backups. RMAN automatically uses the change tracking file to determine which blocks need to be read during an incremental backup, and directly accesses those blocks to back them up. When block change tracking is not enabled, the entire datafile is read during each incremental backup to find and back up only the changed blocks, even if just a very small part of that datafile has changed since the previous backup.
+The change tracking file is a binary file and resides in the fast recovery area (FRA). This file should be located in the same directory as your database files. To determine if block change tracking is already enabled, issue the following query:
+p129-01
+To enable block change tracking, execute the following command (the database can be mounted or open):
+p129-02
+The above command assumes you are using OMF, which will name the block change tracking file under the DB_CREATE_FILE_DEST location. If not using OMF, name the block change tracking file yourself:
+p129-03
+Related Post
+
+=================================
+
+ Block Change Tracking Feature is used to speed up the RMAN incremental backup.
+
+ 
+
+*After Enabling this feature the records modified since the last backup and log stored of it in a block change tracking file using the change
+
+Tracking writer(CTWR) Process.
+
+ 
+
+*Records modified since the last backup and stores log of it in the blcok change tracking file.
+
+ 
+
+*During backup RMAN uses the logfile to identify the specific blocks that must be backedup.
+
+ 
+
+*Block Change Tracking is not read the whole database blocks but only read the changed blocks which results in the block change tracking file.
+
+ 
+
+*Block Change Tracking file is not read all the datafile blocks but read the changed blocks and take backups.
+
+=======================================================
+Enabling Oracle Block Change Tracking is recommended to improve the performance of incremental backups.  By RMAN not having to scan every block in the database, the backup window will be smaller and infrastructure utilization reduced (CPU, IO).  There is always certain risk to making any change, but in the context of most applications enabling block change tracking will be transparent.
+=============================================
+Port:2049 (TCP) Description:The 3DFS server listens on this port for NFS remote procedure calls (RPCs).FROM:DataServer-IP MediaAgent TO:MediaAgent
+Protocol:NFS
+====================
+Failed to bind port [2049] on [10.100.81.57], another NFS service may be running. Please stop that service and retry. Source: dr_media_svr2, Process: CVJobReplicatorODS
+=======================================
+ Error occurred while processing chunk [33515835] in media [V_9594637], at the time of error in library [ARCHIVE_DISKDR] and mount path [[dr_media_svr1] R:\DRMA01AR_LUN02], for storage policy [SP_DR_BACKUP] copy [Tape
+=================================================================================================================
+2050 (TCP):Mount3 port.
+
+If necessary, the port mapping can be changed using the nMount3Port additional setting on the MediaAgent where the 3dnfs service is running.
+============================
+Failed to bind port [2049] on [10.100.81.57], another NFS service may be running. Please stop that service and retry. Source: dr_media_svr2, Process: CVJobReplicatorODS
+================================================================================================================
+111 (TCP+UDP):SUN RPC PortMapper
+This port is used by the DataServer-IP MediaAgent to find the mount and NFS ports used by the MediaAgent performing the backups.
+
+On Linux servers, rpcbind should be installed and enabled. Otherwise the registration with the portmapper will fail.
+=================================================================================================================
+https://documentation.commvault.com/11.24/expert/8603_increasing_pipeline_buffers.html
+Increasing the Pipeline Buffers=====nNumPipelineBuffers===nNumPipelineBuffers additional setting to 600 or 900.
+=================================================================================================================
+ DataMoverLookAheadLinkReaderSlots {Addition setting}
+ nNumPipelineBuffers.
+
+https://documentation.commvault.com/11.24/expert/102520_using_smart_network_topology_when_setting_up_network_connections.html
+=======================================================================================================
+https://documentation.commvault.com/11.24/expert/7360_changing_network_ports.html#changing-network-ports-for-clients-or-mediaagents-via-additional-settings-in-commcell-console
+=================================================================================================================
+After installation, you can later configure Windows Firewall using AddFWExclusions.bat program. The AddFWExclusions.bat program should be run through the client computer's command prompt to prevent adding system32 executables to the firewall exception list, as the default system environment variable may be triggered. You can also run the AddFWExclusions.bat program using GPO or SCCM if needed.
+=================================================================================================================
+Configuring Windows Firewall to Allow CommCell Communication
+C:\Program Files\Commvault\ContentStore\Base\AddFWExclusions.bat
+
+While logged in as an administrator, open the command prompt on the client computer.
+
+Navigate to the software_installation_path/Base folder.
+
+Run the AddFWExclusions.bat file to execute the commands.
+
+All applicable CommCell communication programs and services will be added to Windows Firewall Exception List. 
+=================================================================================================================
+https://documentation.commvault.com/11.24/expert/7102_port_requirements_for_commvault.html
+==================================================================================================================
+https://documentation.commvault.com/11.24/expert/11020_media_management_configuration_deduplication.html
+==================================================================================================================
+
+
+#******DATA/CONTROL FILE/SPFILE BACKUP SCRIPT******#
+
+run {
+allocate channel ch1 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch2 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch3 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch4 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch5 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch6 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch7 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch8 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch9 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch10 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch11 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch12 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch13 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch14 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch15 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch16 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch17 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch18 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch19 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch20 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+## send "BACKUP -jm 83918861 -a 2:338 -cl 595 -ins 46 -at 22 -j 4816793 -bal 0 -t 1 -ms 20 -data -tc -PREVIEW  -useCvNwSrv";
+setlimit channel ch1 maxopenfiles 8;
+setlimit channel ch2 maxopenfiles 8;
+setlimit channel ch3 maxopenfiles 8;
+setlimit channel ch4 maxopenfiles 8;
+setlimit channel ch5 maxopenfiles 8;
+setlimit channel ch6 maxopenfiles 8;
+setlimit channel ch7 maxopenfiles 8;
+setlimit channel ch8 maxopenfiles 8;
+setlimit channel ch9 maxopenfiles 8;
+setlimit channel ch10 maxopenfiles 8;
+setlimit channel ch11 maxopenfiles 8;
+setlimit channel ch12 maxopenfiles 8;
+setlimit channel ch13 maxopenfiles 8;
+setlimit channel ch14 maxopenfiles 8;
+setlimit channel ch15 maxopenfiles 8;
+setlimit channel ch16 maxopenfiles 8;
+setlimit channel ch17 maxopenfiles 8;
+setlimit channel ch18 maxopenfiles 8;
+setlimit channel ch19 maxopenfiles 8;
+setlimit channel ch20 maxopenfiles 8;
+backup
+ incremental level = 0 
+ filesperset = 32 
+format='<CVJOBID>_%d_%U'
+ database  
+ include current controlfile  ;
+backup format='<CVJOBID>_%d_%U'
+ current controlfile for standby;
+ resync catalog;
+}
+exit;
+
+#******LOGS BACKUP SCRIPT******#
+run {
+allocate channel ch1 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+allocate channel ch2 type 'sbt_tape'
+PARMS="SBT_LIBRARY=/commvault/Base64/libobk.a(shr.o), BLKSIZE=1048576 ENV=(CV_mmsApiVsn=2)"
+TRACE 0;
+## send "BACKUP -jm 83951629 -a 2:338 -cl 595 -ins 46 -at 22 -j 4816793 -bal 0 -t 1 -ms 2 -logs -tc -PREVIEW  -useCvNwSrv";
+setlimit channel ch1 maxopenfiles 8;
+setlimit channel ch2 maxopenfiles 8;
+ backup 
+ filesperset = 32 
+format='<CVJOBID>_%d_%U'
+ (archivelog  all  );
+
+ backup format='<CVJOBID>_%d_%U'
+ current controlfile  ; 
+backup format='<CVJOBID>_%d_%U'
+ current controlfile for standby;
+ resync catalog;
+}
+exit;
+
+
+#****** READINESS REPORT *********#
+Agent Install Check =>
+ Result: SUCCESS
+ Description: Verified install folders have required access rights
+Database Mode Check =>
+ Result: SUCCESS
+ Description: Status: READ WRITE
+RMAN SBT Channel Check =>
+ Result: SUCCESS
+ Description: Verified RMAN channel can load SBT library.
+Recovery Catalog Check =>
+ Result: FAILED
+ Description: Failed to connect to RMAN catalog database [ubarepos] using the specified credentials for the instance [UBAALERT]. Error [We cannot determine if source database is registered with catalog:[select 'DBID found,'||dbId  from RC_DATABASE where dbId = 509601720;
+exit;
+] return 0 rows]. Please verify catalog connectivity with given credentials.
+ Suggestion: Please have DBA validate recovery catalog status & connect string.
+Block Change Tracking Check =>
+ Result: WARNING
+ Description: Found DISABLED. Incremental backups may run slow.
+ Suggestion: Please have DBA enable BCT on this database
+
+==================================================================================================================On a Windows 10 Client, File Recall Operations are Triggered Automatically on Opening a Folder
+= = = = = = = = = = = = = = = = = = == 
+As a workaround, complete the following steps:
+
+Open the Windows Registry Editor, and go to the HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer. 
+Check if the ShellIconOverlayIdentifiers registry key is present.
+Remove the ShellIconOverlayIdentifiers registry key or disable the registry key by setting it to null.
+
+=================================================================================================================
+run { DR-ENGLISH
+setlimit channel ch1 maxopenfiles 8;
+setlimit channel ch2 maxopenfiles 8;
+sql "alter system archive log current";
+ backup 
+ filesperset = 32 
+format='<CVJOBID>_%d_%U'
+ ( archivelog  like '/arch/ENGLISH/archives/%'  delete input )
+ ;
+ delete noprompt archivelog  like '/arch/ENGLISH/archives/%'  backed up 1 times to sbt ;
+}
+exit;
+==============================================================================================================
+
+run {  DR-UBAALERT
+setlimit channel ch1 maxopenfiles 8;
+setlimit channel ch2 maxopenfiles 8;
+#sql "alter system archive log current";
+ backup 
+ filesperset = 32 
+format='<CVJOBID>_%d_%U'
+ ( archivelog  like '/arch/SOFTLIVE/%' delete input )
+ ;
+ delete noprompt archivelog  like '/arch/SOFTLIVE/%'  backed up 1 times to sbt ;
+}
+exit;
+
+==============================================================
+
+REDHAT ADMINISTRATOR PASSWORD UNLOCK CODE.
+[1:24 pm] Idowu Williams
+cat /etc/passwd
+
+==============================================================
